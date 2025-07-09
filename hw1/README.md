@@ -1,24 +1,5 @@
-## Setup
 
-You can run this code on your own machine or on Google Colab. 
-
-1. **Local option:** If you choose to run locally, you will need to install MuJoCo and some Python packages; see [installation.md](installation.md) for instructions.
-2. **Colab:** The first few sections of the notebook will install all required dependencies. You can try out the Colab option by clicking the badge below:
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/berkeleydeeprlcourse/homework_fall2023/blob/master/hw1/cs285/scripts/run_hw1.ipynb)
-
-## Complete the code
-
-Fill in sections marked with `TODO`. In particular, edit
- - [policies/MLP_policy.py](cs285/policies/MLP_policy.py)
- - [infrastructure/utils.py](cs285/infrastructure/utils.py)
- - [scripts/run_hw1.py](cs285/scripts/run_hw1.py)
-
-You have the option of running locally or on Colab using
- - [scripts/run_hw1.py](cs285/scripts/run_hw1.py) (if running locally) or [scripts/run_hw1.ipynb](cs285/scripts/run_hw1.ipynb) (if running on Colab)
-
-See the homework pdf for more details.
-
+![Image](https://github.com/user-attachments/assets/569beb6b-1224-4dce-9bd3-3e4002347456)
 ## Run the code
 
 Tip: While debugging, you probably want to keep the flag `--video_log_freq -1` which will disable video logging and speed up the experiment. However, feel free to remove it to save videos of your awesome policy!
