@@ -36,15 +36,28 @@ class ValueCritic(nn.Module):
 
     def forward(self, obs: torch.Tensor) -> torch.Tensor:
         # TODO: implement the forward pass of the critic network
-        pass
+        return self.network(obs)
         
 
+
+    #########################################
+    #여기에선 V를 학습시켜주는 것. 실제 traj에서 얻은 q리턴을 가지고 있으니 그것을 목표로 잡고 현재 critic이 예측하는 v를
+    #q에 가까워지도록 하는 것.
     def update(self, obs: np.ndarray, q_values: np.ndarray) -> dict:
         obs = ptu.from_numpy(obs)
         q_values = ptu.from_numpy(q_values)
 
+        #q_values = (q_values - q_values.mean()) / (q_values.std() + 1e-8)
+
         # TODO: update the critic using the observations and q_values
-        loss = None
+        predicted_values = self(obs)
+        #loss = F.mse_loss(predicted_values, q_values)
+        loss = F.mse_loss(predicted_values.squeeze(), q_values)
+
+
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
 
         return {
             "Baseline Loss": ptu.to_numpy(loss),
