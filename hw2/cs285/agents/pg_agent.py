@@ -69,64 +69,32 @@ class PGAgent(nn.Module):
         # TODO: flatten the lists of arrays into single arrays, so that the rest of the code can be written in a vectorized
         # way. obs, actions, rewards, terminals, and q_values should all be arrays with a leading dimension of `batch_size`
         # beyond this point.
-        flat_obs = np.concatenate(obs, axis=0)
-        flat_actions = np.concatenate(actions, axis=0)
-        flat_rewards = np.concatenate(rewards, axis=0)
-        flat_q_values = np.concatenate(q_values, axis=0)
-        flat_terminals = np.concatenate(terminals, axis=0)
+        obs = np.concatenate(obs, axis=0)
+        actions = np.concatenate(actions, axis=0)
+        rewards = np.concatenate(rewards, axis=0)
+        q_values = np.concatenate(q_values, axis=0)
+        terminals = np.concatenate(terminals, axis=0)
 
         # step 2: calculate advantages from Q values
         advantages: np.ndarray = self._estimate_advantage(
-            flat_obs, flat_rewards, flat_q_values, flat_terminals
+            obs, rewards, q_values, terminals
         )
 
         # step 3: use all datapoints (s_t, a_t, adv_t) to update the PG actor/policy
         # TODO: update the PG actor/policy network once using the advantages
-        info: dict = self.actor.update(flat_obs, flat_actions, advantages)
+        info: dict = self.actor.update(obs, actions, advantages)
 
         # step 4: if needed, use all datapoints (s_t, a_t, q_t) to update the PG critic/baseline
         if self.critic is not None:
             # TODO: perform `self.baseline_gradient_steps` updates to the critic/baseline network
-            critic_info: dict = None
+            
 
-            info.update(critic_info)
+            for _ in range(self.baseline_gradient_steps):
+                critic_info: dict = self.critic.update(obs, q_values)
+                info.update(critic_info)
+
 
         return info
-
-
-
-
-
-
-        # # Step 1: Calculate Q-values from rewards
-        # q_values: Sequence[np.ndarray] = self._calculate_q_vals(rewards)
-
-        # # Step 2: Flatten arrays from multiple trajectories
-        # obs_flat = np.concatenate(obs)
-        # actions_flat = np.concatenate(actions)
-        # q_values_flat = np.concatenate(q_values)
-        # terminals_flat = np.concatenate(terminals)
-
-        # # Step 3: Compute advantages
-        # advantages: np.ndarray = self._estimate_advantage(
-        #     obs_flat, rewards, q_values, terminals
-        # )
-
-        # # Step 4: Convert to torch.Tensor
-        # obs_tensor = ptu.from_numpy(obs_flat)
-        # actions_tensor = ptu.from_numpy(actions_flat)
-        # advantages_tensor = ptu.from_numpy(np.concatenate(advantages))
-
-        # # Step 5: Policy update using (s_t, a_t, adv_t)
-        # info: dict = self.actor.update(obs_tensor, actions_tensor, advantages_tensor)
-
-        # # Step 6: Critic/baseline update (optional)
-        # if self.critic is not None:
-        #     for _ in range(self.baseline_gradient_steps):
-        #         critic_info = self.critic.update(obs_tensor, q_values_flat)
-        #     info.update(critic_info)
-
-        # return info
 
 
 
@@ -176,25 +144,39 @@ class PGAgent(nn.Module):
 
         else:
             # TODO: run the critic and use it as a baseline
-            values = None
+            values = self.critic(ptu.from_numpy(obs)) 
+            values = ptu.to_numpy(values.squeeze())
             assert values.shape == q_values.shape
 
             if self.gae_lambda is None:
                 # TODO: if using a baseline, but not GAE, what are the advantages?
-                advantages = None
+                advantages = q_values - values
+
             else:
+
+                def compute_delta(rewards, values, gamma):
+                    
+                    deltas = rewards + gamma * values[1:] - values[:-1]
+                    return deltas
+
+
                 # TODO: implement GAE
                 batch_size = obs.shape[0]
 
                 # HINT: append a dummy T+1 value for simpler recursive calculation
                 values = np.append(values, [0])
                 advantages = np.zeros(batch_size + 1)
-
+                delta = compute_delta(rewards, values, self.gamma)
+                advantage_sum = 0.0
                 for i in reversed(range(batch_size)):
                     # TODO: recursively compute advantage estimates starting from timestep T.
                     # HINT: use terminals to handle edge cases. terminals[i] is 1 if the state is the last in its
                     # trajectory, and 0 otherwise.
-                    pass
+                    if terminals[i] == 1:
+                        advantage_sum = 0
+                    advantage_sum = delta[i] + self.gamma*self.gae_lambda*advantage_sum
+                    advantages[i] = advantage_sum
+                    
 
                 # remove dummy advantage
                 advantages = advantages[:-1]
