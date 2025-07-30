@@ -72,7 +72,7 @@ def run_training_loop(args):
         # TODO: sample `args.batch_size` transitions using utils.sample_trajectories
         # make sure to use `max_ep_len`
         trajs, envsteps_this_batch = utils.sample_trajectories(
-                env, agent.actor, args.eval_batch_size, max_ep_len
+                env, agent.actor, args.batch_size, max_ep_len
             )#None, None  # TODO
         total_envsteps += envsteps_this_batch
 
@@ -82,6 +82,7 @@ def run_training_loop(args):
         # for k, v in trajs_dict.items():
         #     print(f"{k}: {[arr.shape for arr in v]}")
 
+        # breakpoint()
 
             # observation: [(12, 4), (38, 4), (29, 4), (18, 4), (20, 4), (34, 4), (20, 4), (21, 4), (15, 4), (23, 4), (19, 4), (26, 4), (14, 4), (13, 4), (12, 4), (25, 4), (15, 4), (10, 4), (24, 4), (20, 4)]
             # image_obs: [(0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,)]
@@ -208,6 +209,9 @@ def main():
     parser.add_argument("--scalar_log_freq", type=int, default=1)
 
     parser.add_argument("--action_noise_std", type=float, default=0)
+
+    parser.add_argument("--num_eval_trajectories", "-net", type=int, default=10)
+
 
     args = parser.parse_args()
 
