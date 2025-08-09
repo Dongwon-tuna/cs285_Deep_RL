@@ -38,6 +38,8 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
 
     assert discrete, "DQN only supports discrete action spaces"
 
+    #breakpoint()
+    
     agent = DQNAgent(
         env.observation_space.shape,
         env.action_space.n,
@@ -91,9 +93,11 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
         epsilon = exploration_schedule.value(step)
         
         # TODO(student): Compute action
-        action = ...
+        action = agent.get_action(observation,epsilon)#...
 
         # TODO(student): Step the environment
+        next_observation, reward, done, info = env.step(action)
+
 
         next_observation = np.asarray(next_observation)
         truncated = info.get("TimeLimit.truncated", False)
@@ -102,10 +106,10 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
         if isinstance(replay_buffer, MemoryEfficientReplayBuffer):
             # We're using the memory-efficient replay buffer,
             # so we only insert next_observation (not observation)
-            ...
+            replay_buffer.insert(action, reward, next_observation[-1, ...], done)
         else:
             # We're using the regular replay buffer
-            ...
+            replay_buffer.insert(observation, action, reward, next_observation, done)
 
         # Handle episode termination
         if done:
@@ -119,13 +123,19 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
         # Main DQN training loop
         if step >= config["learning_starts"]:
             # TODO(student): Sample config["batch_size"] samples from the replay buffer
-            batch = ...
+            batch = replay_buffer.sample(config["batch_size"])
 
             # Convert to PyTorch tensors
             batch = ptu.from_numpy(batch)
-
             # TODO(student): Train the agent. `batch` is a dictionary of numpy arrays,
-            update_info = ...
+            update_info = agent.update(
+                obs=batch["observations"],
+                action=batch["actions"],
+                reward=batch["rewards"],
+                next_obs=batch["next_observations"],
+                done=batch["dones"],
+                step=step
+            )
 
             # Logging code
             update_info["epsilon"] = epsilon
