@@ -88,7 +88,7 @@ Result of problem 5 :
 
 ![Eval Average Returm](imgs/5.1.png)
 
-![Name](imgs/5,2.png)
+![Name](imgs/5.2.png)
 
 ![gif](imgs/sec5.gif)
 
@@ -111,11 +111,11 @@ done
 
 Result of problem 6 :
 
-![Name](imgs/6,1_name.png)
+![Name](imgs/6.1_name.png)
 
 ![Eval Average Returm](imgs/6.1.png)
 
-![Name](imgs/6,2_name.png)
+![Name](imgs/6.2_name.png)
 
 ![gif](imgs/sec6.gif)
 
