@@ -37,6 +37,15 @@ Result of problem 3 :
 ![gif](imgs/sec3.gif)
 
 
+– Which value estimator has better performance without advantage normalization: the trajectorycentric one, or the one using reward-to-go?
+Answer: Reward-to-go
+
+– Did advantage normalization help?
+Answer: Yes
+– Did the batch size make an impact?
+Answer: : Yes. More stable average return.
+
+
 ### 4  Using Neural Network Baseline
 
 Command for problem 4 :
@@ -85,12 +94,21 @@ python cs285/scripts/run_hw2.py \
 
 
 Result of problem 5 :
+1. Provide a single plot with the learning curves for the LunarLander-v2 experiments that you tried. Describe in words how λ affected task performance. The run with the best performance should achieve an average score close to 200 (180+).
 
 ![Eval Average Returm](imgs/5.1.png)
 
 ![Name](imgs/5.2.png)
 
 ![gif](imgs/sec5.gif)
+
+
+• Consider the parameter λ. What does λ = 0 correspond to? What about λ = 1? Relate this to the task
+performance in LunarLander-v2 in one or two sentences.
+
+Answer: When λ = 0, GAE reduces to a high-bias, low-variance TD(1-step) estimator.
+When λ = 1, it becomes a Monte Carlo estimator with low bias and high variance; in LunarLander-v2, intermediate values like λ = 0.97 often yield better performance by balancing bias and variance.
+
 
 
 ### 6 Hyperparameters and Sample Efficiency
