@@ -38,12 +38,16 @@ Result of problem 3 :
 
 
 – Which value estimator has better performance without advantage normalization: the trajectorycentric one, or the one using reward-to-go?
+
 Answer: Reward-to-go
 
 – Did advantage normalization help?
+
 Answer: Yes
+
 – Did the batch size make an impact?
-Answer: : Yes. More stable average return.
+
+Answer: Yes. More stable average return.
 
 
 ### 4  Using Neural Network Baseline
