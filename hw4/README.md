@@ -31,10 +31,12 @@ num_layers: 1, hidden_size: 32
 
 experiments 2
 num_layers: 2, hidden_size: 64
+
 ![ ](imgs/1.2.png)
 
 experiments 3
 num_layers: 3, hidden_size: 128
+
 ![ ](imgs/1.3.png)
 
 
