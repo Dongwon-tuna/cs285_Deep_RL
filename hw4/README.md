@@ -3,6 +3,14 @@
 # HW 4
 
 
+
+## Note
+- Implemented algorithms:
+  - [x] Model Predictive Control (MPC)
+  - [x] Cross-Entropy Method (CEM)
+  - [x] Model-Based Policy Optimization (MBPO)
+
+
 ## Analysis
 
 ---
