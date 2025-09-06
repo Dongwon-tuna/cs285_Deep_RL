@@ -1,4 +1,13 @@
 
+#  HW 2
+
+## Note
+
+- Implemented algorithms:
+  - [x] Policy Gradient (with value function)
+  - [x] Generalized Advantage Estimation (GAE)
+
+
 
 ## Run the code
 

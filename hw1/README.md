@@ -1,3 +1,11 @@
+# HW1
+
+## Note
+
+- Implemented algorithms:
+  - [x] Behavior Cloning
+  - [x] DAgger (Dataset Aggregation)
+
 
 
 ## Run the code
