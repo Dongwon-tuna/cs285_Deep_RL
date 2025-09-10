@@ -20,7 +20,7 @@ Across HW1–HW5, I implemented a wide range of classic and modern reinforcement
 - **Double Q-Learning**  
 - **Soft Actor-Critic (SAC)**  
 - **Clipped Double Q-Learning**  
-- **Randomized Ensembled Double Q-Learning (REDQ)**  
+
 
 ### HW4 – Model-Based RL  
 - **Model Predictive Control (MPC)**  
