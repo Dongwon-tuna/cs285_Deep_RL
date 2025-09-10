@@ -8,7 +8,7 @@
   - [x] Double Q-Learning
   - [x] Soft Actor-Critic (SAC)
   - [x] Clipped Double Q-Learning
-  - [x] Randomized Ensembled Double Q-Learning (REDQ)
+
 
 
 
